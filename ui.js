@@ -18,21 +18,26 @@ const App = () => {
 
 	useInput((input, key) => {
 		if (key.delete || key.backspace) {
-			setToken(token.slice(0, token.length - 1));
+			setToken(token.slice(0, -1));
 
 			return;
 		}
 
 		if (key.return) {
 			setIsProcessing(true);
-			getCredentials({token, profileName, mainProfileName, accountNumber, accountName, tokenTtl})
-				.then(writeProfile(profileName))
-				.then(() => setDone(true))
-				.catch(setError)
-				.finally(() => {
+			(async () => {
+				try {
+					const cred = await getCredentials({token, profileName, mainProfileName, accountNumber, accountName, tokenTtl});
+
+					writeProfile(profileName)(cred);
+					setDone(true);
+				} catch (error) {
+					setError(error);
+				} finally {
 					setIsProcessing(false);
 					exit();
-				});
+				}
+			})();
 
 			return;
 		}
