@@ -1,25 +1,36 @@
 const React = require('react');
-const {Text, Color, Box, useInput, useApp} = require('ink');
-const {getCredentials, writeProfile} = require('./lib/authenticator');
+const {Text, Box, useInput, useApp} = require('ink');
 const {getConfigVar} = require('./config');
+const {getCredentials, writeProfile} = require('./lib/authenticator');
 
-const profileName = getConfigVar('PROFILE_NAME');
-const mainProfileName = getConfigVar('MAIN_PROFILE_NAME');
-const accountNumber = getConfigVar('ACCOUNT_NUMBER');
-const accountName = getConfigVar('ACCOUNT_NAME');
 const tokenTtl = getConfigVar('TOKEN_TTL');
+const profileName = getConfigVar('PROFILE_NAME');
+const accountName = getConfigVar('ACCOUNT_NAME');
+const accountNumber = getConfigVar('ACCOUNT_NUMBER');
+const mainProfileName = getConfigVar('MAIN_PROFILE_NAME');
 
 const App = () => {
+	const {exit} = useApp();
 	const [token, setToken] = React.useState('');
 	const [done, setDone] = React.useState(false);
-	const {exit} = useApp();
+	const [error, setError] = React.useState(false);
+	const [isProcessing, setIsProcessing] = React.useState(false);
 
 	useInput((input, key) => {
+		if (key.delete || key.backspace) {
+			setToken(token.slice(0, token.length - 1));
+
+			return;
+		}
+
 		if (key.return) {
+			setIsProcessing(true);
 			getCredentials({token, profileName, mainProfileName, accountNumber, accountName, tokenTtl})
 				.then(writeProfile(profileName))
-				.then(() => {
-					setDone(true);
+				.then(() => setDone(true))
+				.catch(setError)
+				.finally(() => {
+					setIsProcessing(false);
 					exit();
 				});
 
@@ -34,12 +45,23 @@ const App = () => {
 			{token !== false && (
 				<Box>
 					<Text>
-						Input the code from an authenticator app: <Color green>{token}</Color>
+						Input the code from an authenticator app: <Text color="green">{token}</Text>
 					</Text>
 				</Box>
 			)}
+			{isProcessing && (
+				<Box>
+					<Text color="blue">Processing...</Text>
+				</Box>
+			)}
+			{error && (
+				<>
+					<Text color="red">Error</Text>
+					<Text color="red">{error.message}</Text>
+				</>
+			)}
 			{done && (
-				<Text>Credentials were successfully updated!</Text>
+				<Text color="green">Credentials were successfully updated!</Text>
 			)}
 		</>
 	);

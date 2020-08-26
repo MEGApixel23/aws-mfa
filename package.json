@@ -16,23 +16,23 @@
 	],
 	"dependencies": {
 		"import-jsx": "^4.0.0",
-		"ink": "^2.7.1",
-		"meow": "^6.1.0",
+		"ink": "^3.0.4",
+		"meow": "^7.1.0",
 		"prop-types": "^15.7.2",
 		"react": "^16.13.1"
 	},
 	"devDependencies": {
-		"@babel/preset-react": "^7.9.4",
-		"@babel/register": "^7.9.0",
-		"ava": "^3.8.1",
+		"@babel/preset-react": "^7.10.4",
+		"@babel/register": "^7.10.5",
+		"ava": "^3.12.1",
 		"chalk": "^4.0.0",
 		"dotenv": "^8.2.0",
-		"eslint-config-xo": "^0.31.0",
+		"eslint-config-xo": "^0.32.1",
 		"eslint-config-xo-react": "^0.23.0",
-		"eslint-plugin-react": "^7.20.0",
-		"eslint-plugin-react-hooks": "^3.0.0",
-		"ink-testing-library": "^1.0.3",
-		"xo": "^0.30.0"
+		"eslint-plugin-react": "^7.20.6",
+		"eslint-plugin-react-hooks": "^4.1.0",
+		"ink-testing-library": "^2.0.1",
+		"xo": "^0.33.0"
 	},
 	"ava": {
 		"require": [
