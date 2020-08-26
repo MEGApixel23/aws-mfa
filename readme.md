@@ -1,3 +1,5 @@
+[![npm](https://img.shields.io/badge/npm-0.0.2-blue)](https://www.npmjs.com/package/aws-mfa-cli)
+
 # AWS MFA CLI
 
 If you have set up the
